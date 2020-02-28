@@ -19,10 +19,8 @@ using namespace std;
 
 int main() {
 	//testPolynomial();
-	Monomial x(2, 1), xsquare(3, 2), m23(2, 3);
-	x ^ 5;
+	//Function x("2*x + 2*x^2");
 	cout << x;
-	
 	cout << endl << endl;
 	system("pause");
 	return 0;
