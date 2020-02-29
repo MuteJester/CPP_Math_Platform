@@ -7,6 +7,11 @@
 #include <stack>
 #include <cmath>
 
+#define PI 3.14159265359
+#define DEG_TO_RAD(A) A * PI/180
+#define RAD_TO_DEG(A) A * 180/PI
+
+
 class Monomial {
 public:
 	int Degree;
@@ -95,16 +100,19 @@ Monomial::Monomial(int const &Coeff, int const &Deg) {
 	this->Degree = Deg;
 	is_cos = is_sin = is_tan = is_lan = is_E = false;
 	is_monom = true;
+	this->Pry = 1;
 }
 Monomial::Monomial(int const &Coeff) {
 	this->Degree = 1;
 	this->Coefficient = Coeff;
 	is_cos = is_sin = is_tan = is_lan = is_E = false;
 	is_monom = true;
+	this->Pry = 1;
 }
 Monomial::Monomial(std::string const &form) {
 	is_cos = is_sin = is_tan = is_lan = is_E = false;
 	is_monom = false;
+	this->Pry = 1;
 	std::size_t pos, endp;
 	std::stringstream ss, ss2;
 	std::string via, via2,subs;
@@ -113,43 +121,107 @@ Monomial::Monomial(std::string const &form) {
 	if (form.find("cos(") != std::string::npos) {
 		this->is_cos = true;
 		pos = form.find("cos(");
-		pos += 3;
-		endp = form.find(")",pos);
-		subs = form.substr(pos+1, endp-1);
-		get_Cof_Deg(subs, COF, DEG);
-		this->Degree = DEG;
-		this->Coefficient = COF;
+		if (form[pos - 1] == '*') {
+			for (std::size_t i = 0; i < pos - 1; i++) {
+				ss << form[i];
+			}
+			via = ss.str();
+			this->Pry = atoi(via.c_str());
+
+			pos += 3;
+			endp = form.find(")", pos);
+			subs = form.substr(pos + 1, endp - 1);
+			get_Cof_Deg(subs, COF, DEG);
+			this->Degree = DEG;
+			this->Coefficient = COF;
+		}
+		else {
+			pos += 3;
+			endp = form.find(")", pos);
+			subs = form.substr(pos + 1, endp - 1);
+			get_Cof_Deg(subs, COF, DEG);
+			this->Degree = DEG;
+			this->Coefficient = COF;
+		}
 
 	}
 	else if (form.find("sin(") != std::string::npos) {
 		this->is_sin = true;
 		pos = form.find("sin(");
-		pos += 3;
-		endp = form.find(")", pos);
-		subs = form.substr(pos + 1, endp - 1);
-		get_Cof_Deg(subs, COF, DEG);
-		this->Degree = DEG;
-		this->Coefficient = COF;
+		if (form[pos - 1] == '*') {
+			for (std::size_t i = 0; i < pos - 1; i++) {
+				ss << form[i];
+			}
+			via = ss.str();
+			this->Pry = atoi(via.c_str());
+
+			pos += 3;
+			endp = form.find(")", pos);
+			subs = form.substr(pos + 1, endp - 1);
+			get_Cof_Deg(subs, COF, DEG);
+			this->Degree = DEG;
+			this->Coefficient = COF;
+		}
+		else {
+			pos += 3;
+			endp = form.find(")", pos);
+			subs = form.substr(pos + 1, endp - 1);
+			get_Cof_Deg(subs, COF, DEG);
+			this->Degree = DEG;
+			this->Coefficient = COF;
+		}
 	}
 	else if (form.find("tan(") != std::string::npos) {
 		this->is_tan = true;
 		pos = form.find("tan(");
-		pos += 3;
-		endp = form.find(")", pos);
-		subs = form.substr(pos + 1, endp - 1);
-		get_Cof_Deg(subs, COF, DEG);
-		this->Degree = DEG;
-		this->Coefficient = COF;
+		if (form[pos - 1] == '*') {
+			for (std::size_t i = 0; i < pos - 1; i++) {
+				ss << form[i];
+			}
+			via = ss.str();
+			this->Pry = atoi(via.c_str());
+
+			pos += 3;
+			endp = form.find(")", pos);
+			subs = form.substr(pos + 1, endp - 1);
+			get_Cof_Deg(subs, COF, DEG);
+			this->Degree = DEG;
+			this->Coefficient = COF;
+		}
+		else {
+			pos += 3;
+			endp = form.find(")", pos);
+			subs = form.substr(pos + 1, endp - 1);
+			get_Cof_Deg(subs, COF, DEG);
+			this->Degree = DEG;
+			this->Coefficient = COF;
+		}
 	}
 	else if (form.find("ln(") != std::string::npos) {
 		this->is_lan = true;
 		pos = form.find("ln(");
-		pos += 2;
-		endp = form.find(")", pos);
-		subs = form.substr(pos + 1, endp - 1);
-		get_Cof_Deg(subs, COF, DEG);
-		this->Degree = DEG;
-		this->Coefficient = COF;
+		if (form[pos - 1] == '*') {
+			for (std::size_t i = 0; i < pos - 1; i++) {
+				ss << form[i];
+			}
+			via = ss.str();
+			this->Pry = atoi(via.c_str());
+
+			pos += 2;
+			endp = form.find(")", pos);
+			subs = form.substr(pos + 1, endp - 1);
+			get_Cof_Deg(subs, COF, DEG);
+			this->Degree = DEG;
+			this->Coefficient = COF;
+		}
+		else {
+			pos += 3;
+			endp = form.find(")", pos);
+			subs = form.substr(pos + 1, endp - 1);
+			get_Cof_Deg(subs, COF, DEG);
+			this->Degree = DEG;
+			this->Coefficient = COF;
+		}
 	}
 	else {
 		this->is_monom = true;
@@ -163,7 +235,13 @@ Monomial::Monomial(std::string const &form) {
 
 std::ostream &operator<<(std::ostream &out, Monomial const &source) {
 	if (source.is_cos == true) {
-		std::cout << "cos(";
+		if (source.Pry > 1) {
+			std::cout <<source.Pry <<"*cos(";
+
+		}
+		else {
+			std::cout << "cos(";
+		}
 		if (source.Degree == 0) {
 			out << source.Coefficient;
 			std::cout << ")";
@@ -172,10 +250,18 @@ std::ostream &operator<<(std::ostream &out, Monomial const &source) {
 
 		}
 		else if (source.Degree == 1) {
-			out << source.Coefficient << "*X";
-			std::cout << ")";
+			if (source.Coefficient == 1) {
+				out << "X";
+				std::cout << ")";
 
-			return out;
+				return out;
+			}
+			else {
+				out << source.Coefficient << "*X";
+				std::cout << ")";
+
+				return out;
+			}
 
 
 		}
@@ -187,7 +273,13 @@ std::ostream &operator<<(std::ostream &out, Monomial const &source) {
 		}
 	}
 	else if (source.is_sin == true) {
-		std::cout << "sin(";
+		if (source.Pry == 1) {
+			std::cout << "sin(";
+		}
+		else {
+			std::cout <<source.Pry << "*sin(";
+
+		}
 		if (source.Degree == 0) {
 			out << source.Coefficient;
 			std::cout << ")";
@@ -196,10 +288,18 @@ std::ostream &operator<<(std::ostream &out, Monomial const &source) {
 
 		}
 		else if (source.Degree == 1) {
-			out << source.Coefficient << "*X";
-			std::cout << ")";
+			if (source.Coefficient == 1) {
+				out << "X";
+				std::cout << ")";
 
-			return out;
+				return out;
+			}
+			else {
+				out << source.Coefficient << "*X";
+				std::cout << ")";
+
+				return out;
+			}
 
 
 		}
@@ -211,7 +311,13 @@ std::ostream &operator<<(std::ostream &out, Monomial const &source) {
 		}
 	}
 	else if (source.is_tan == true) {
-		std::cout << "tan(";
+		if (source.Pry == 1) {
+			std::cout << "tan(";
+		}
+		else {
+			std::cout<<source.Pry << "*tan(";
+
+		}
 		if (source.Degree == 0) {
 			out << source.Coefficient;
 			std::cout << ")";
@@ -220,10 +326,18 @@ std::ostream &operator<<(std::ostream &out, Monomial const &source) {
 
 		}
 		else if (source.Degree == 1) {
-			out << source.Coefficient << "*X";
-			std::cout << ")";
+			if (source.Coefficient == 1) {
+				out << "X";
+				std::cout << ")";
 
-			return out;
+				return out;
+			}
+			else {
+				out << source.Coefficient << "*X";
+				std::cout << ")";
+
+				return out;
+			}
 
 
 		}
@@ -242,20 +356,35 @@ std::ostream &operator<<(std::ostream &out, Monomial const &source) {
 
 		}
 		else if (source.Degree == 1) {
-			out << source.Coefficient << "*X";
-\
-			return out;
+			if (source.Coefficient == 1) {
+				out << "X";
+				std::cout << ")";
+
+				return out;
+			}
+			else {
+				out << source.Coefficient << "*X";
+				std::cout << ")";
+
+				return out;
+			}
 
 
 		}
 		else {
 			out << source.Coefficient << "*X^" << source.Degree;
-\
+
 			return out;
 		}
 	}
 	else if (source.is_lan == true) {
-		std::cout << "ln(";
+		if (source.Pry == 1) {
+			std::cout << "ln(";
+		}
+		else {
+			std::cout << source.Pry << "*ln(";
+
+		}
 		if (source.Degree == 0) {
 			out << source.Coefficient;
 			std::cout << ")";
@@ -264,11 +393,18 @@ std::ostream &operator<<(std::ostream &out, Monomial const &source) {
 
 		}
 		else if (source.Degree == 1) {
-			out << source.Coefficient << "*X";
-			std::cout << ")";
+			if (source.Coefficient == 1) {
+				out << "X";
+				std::cout << ")";
 
-			return out;
+				return out;
+			}
+			else {
+				out << source.Coefficient << "*X";
+				std::cout << ")";
 
+				return out;
+			}
 
 		}
 		else {
@@ -331,16 +467,66 @@ void Monomial::operator/(Monomial const &b) {
 }
 void Monomial::Derive() {
 	if (is_cos == true) {
+		is_cos = false;
+		is_sin = true;
 		
+		if (Degree == 1) {
+			Pry *= -Coefficient;
+			return;
+		}
+		else if (Degree == 0) {
+			Coefficient = 0;
+		}
+		else {
+	
+		}
 	}
 	else if (is_sin == true) {
+		is_cos = true;
+		is_sin = false;
 
+		if (Degree == 1) {
+			Pry *= Coefficient;
+			return;
+		}
+		else if (Degree == 0) {
+			Coefficient = 0;
+		}
+		else {
+
+		}
 	}
 	else if (is_tan==true) {
+		is_tan = false;
+		is_cos = true;
 
+		if (Degree == 1) {
+			Pry *= Coefficient;
+			Degree = -2;
+
+			return;
+		}
+		else if (Degree == 0) {
+			Coefficient = 0;
+		}
+		else {
+
+		}
 	}
 	else if (is_lan == true) {
+			
 
+		if (Degree == 1) {
+			Pry *= Coefficient;
+			Degree = -1;
+			return;
+		}
+		else if (Degree == 0) {
+			Coefficient = 0;
+		}
+		else {
+
+		}
 	}
 	else if (is_monom == true) {
 		if (Degree == 1) {
@@ -367,10 +553,22 @@ void Monomial::Derive(int const &mag) {
 double Monomial::operator[](double const &x_value) {
 	if (this->is_cos == true) {
 		if (Degree == 0) {
-			return cos(Coefficient);
+			if (Pry == 1) {
+				return cos(Coefficient);
+			}
+			else {
+				return Pry * cos(Coefficient);
+
+			}
 		}
 		else if (Degree == 1) {
-			return cos(Coefficient * x_value);
+			if (Pry == 1) {
+				return cos(Coefficient * x_value);
+			}
+			else {
+				return Pry * cos(Coefficient * x_value);
+
+			}
 		}
 		else {
 			double t_valv = x_value;
@@ -379,7 +577,13 @@ double Monomial::operator[](double const &x_value) {
 				t_valv *= x_value;
 			}
 			t_valv *= Coefficient;
-			return cos(t_valv);
+			if (Pry == 1) {
+				return cos(t_valv);
+			}
+			else {
+				return Pry * cos(t_valv);
+
+			}
 		}
 	}
 	else if (this->is_monom == true) {
@@ -402,11 +606,23 @@ double Monomial::operator[](double const &x_value) {
 	}
 	else if (this->is_tan == true) {
 		if (Degree == 0) {
-			return std::tan(Coefficient);
+			if (Pry == 1) {
+				return std::tan(Coefficient);
+			}
+			else {
+				return Pry * std::tan(Coefficient);
+
+			}
 
 		}
 		else if (Degree == 1) {
-			return std::tan(Coefficient * x_value);
+			if (Pry == 1) {
+				return std::tan(Coefficient * x_value);
+			}
+			else {
+				return Pry *  std::tan(Coefficient * x_value);
+
+			}
 		}
 		else {
 			double t_valv = x_value;
@@ -415,16 +631,34 @@ double Monomial::operator[](double const &x_value) {
 				t_valv *= x_value;
 			}
 			t_valv *= Coefficient;
-			return std::tan(t_valv);
+			if (Pry == 1) {
+				return std::tan(t_valv);
+			}
+			else {
+				return Pry * std::tan(t_valv);
+
+			}
 		}
 	}
 	else if (this->is_lan == true) {
 		if (Degree == 0) {
-			return std::log(Coefficient);
+			if (Pry == 1) {
+				return std::log(Coefficient);
+			}
+			else {
+				return Pry * std::log(Coefficient);
+
+			}
 
 		}
 		else if (Degree == 1) {
-			return std::log(Coefficient * x_value);
+			if (Pry == 1) {
+				return std::log(Coefficient * x_value);
+			}
+			else {
+				return Pry * std::log(Coefficient * x_value);
+
+			}
 		}
 		else {
 			double t_valv = x_value;
@@ -433,16 +667,34 @@ double Monomial::operator[](double const &x_value) {
 				t_valv *= x_value;
 			}
 			t_valv *= Coefficient;
-			return std::log(t_valv);
+			if (Pry == 1) {
+				return std::log(t_valv);
+			}
+			else {
+				return Pry *  std::log(t_valv);
+
+			}
 		}
 	}
 	else if (this->is_sin == true) {
 		if (Degree == 0) {
-			return std::sin(Coefficient);
+			if (Pry == 1) {
+				return std::sin(Coefficient);
+			}
+			else {
+				return Pry * std::sin(Coefficient);
+
+			}
 			
 		}
 		else if (Degree == 1) {
-			return std::sin(Coefficient * x_value);
+			if (Pry == 1) {
+				return std::sin((Coefficient) * x_value);
+			}
+			else {
+				return Pry * std::sin(Coefficient * x_value);
+
+			}
 		}
 		else {
 			double t_valv = x_value;
@@ -451,7 +703,13 @@ double Monomial::operator[](double const &x_value) {
 				t_valv *= x_value;
 			}
 			t_valv *= Coefficient;
-			return std::sin(t_valv);
+			if (Pry == 1) {
+				return std::sin(t_valv);
+			}
+			else {
+				return Pry * std::sin(t_valv);
+
+			}
 		}
 	}
 	else {
@@ -478,11 +736,13 @@ public:
 	std::stack<Monomial> operands;
 	Function();
 	Function(const char *function);
+	void operator=(Function const &B);
 	double operator[](double const &x_value);
 	friend std::ostream &operator<<(std::ostream &out, Function const &func);
 	void Derive();
 	void Derive(int const &mag);
-
+	int Get_Highest_Degree();
+	double Newton_Raphson_Method(double const &guess,double const &deg_of_accuracy,int const &loops,double const &check_slope);
 };
 
 double commit_operation(char const &op, double const &a, double const &b) {
@@ -620,7 +880,7 @@ double Function::operator[](double const &x_value) {
 					oprnds.pop();
 					b = oprnds.top();
 					oprnds.pop();
-					sum = commit_operation(temp, a, b);
+					sum = commit_operation(temp, b, a);
 					oprnds.push(sum);
 					opts.push(signs[k]);
 				}
@@ -642,6 +902,11 @@ double Function::operator[](double const &x_value) {
 	}
 	return oprnds.top();
 
+}
+void Function::operator=(Function const &B) {
+	this->Body = B.Body;
+	this->signs = B.signs;
+	this->input = B.input;
 }
 std::ostream &operator<<(std::ostream &out, Function const &func) {
 	int k = 0;
@@ -668,4 +933,36 @@ void Function::Derive(int const &mag) {
 	for (int i = 0; i < mag; i++) {
 		this->Derive();
 	}
+}
+int Function::Get_Highest_Degree() {
+	int max = 0;
+	for (auto i : Body) {
+		max < i.Degree ? max = i.Degree : max = max;
+	}
+	return max;
+}
+double Function::Newton_Raphson_Method(double const &guess, double const &deg_of_accuracy, int const &loops, double const &check_slope=0.5) {
+	Function f, f1;
+	double fv,f1v,x = guess,x1 = 0;
+	for (int i = 0; i < loops; i++) {
+		f = *this;
+		f.Derive();
+		f1 = f;
+		f = *this;
+		fv = f[x];
+		f1v = f1[x];
+		if (abs(f1[x]) < check_slope) {
+			std::cout << "Slope is too small" << std::endl;
+			break;
+		}
+
+		x1 = x - (fv / f1v);
+		if ( abs((x1-x)/x1)< deg_of_accuracy) {
+			return x1;
+		}
+		x = x1;
+	
+	}
+	std::cout << "Method does not converge due to oscillation" << std::endl;
+	return 0;
 }
