@@ -121,19 +121,29 @@ Monomial::Monomial(std::string const &form) {
 	if (form.find("cos(") != std::string::npos) {
 		this->is_cos = true;
 		pos = form.find("cos(");
-		if (form[pos - 1] == '*') {
-			for (std::size_t i = 0; i < pos - 1; i++) {
-				ss << form[i];
-			}
-			via = ss.str();
-			this->Pry = atoi(via.c_str());
+		if (pos > 0) {
+			if (form[pos - 1] == '*') {
+				for (std::size_t i = 0; i < pos - 1; i++) {
+					ss << form[i];
+				}
+				via = ss.str();
+				this->Pry = atoi(via.c_str());
 
-			pos += 3;
-			endp = form.find(")", pos);
-			subs = form.substr(pos + 1, endp - 1);
-			get_Cof_Deg(subs, COF, DEG);
-			this->Degree = DEG;
-			this->Coefficient = COF;
+				pos += 3;
+				endp = form.find(")", pos);
+				subs = form.substr(pos + 1, endp - 1);
+				get_Cof_Deg(subs, COF, DEG);
+				this->Degree = DEG;
+				this->Coefficient = COF;
+			}
+			else {
+				pos += 3;
+				endp = form.find(")", pos);
+				subs = form.substr(pos + 1, endp - 1);
+				get_Cof_Deg(subs, COF, DEG);
+				this->Degree = DEG;
+				this->Coefficient = COF;
+			}
 		}
 		else {
 			pos += 3;
@@ -148,19 +158,29 @@ Monomial::Monomial(std::string const &form) {
 	else if (form.find("sin(") != std::string::npos) {
 		this->is_sin = true;
 		pos = form.find("sin(");
-		if (form[pos - 1] == '*') {
-			for (std::size_t i = 0; i < pos - 1; i++) {
-				ss << form[i];
-			}
-			via = ss.str();
-			this->Pry = atoi(via.c_str());
+		if (pos > 0) {
+			if (form[pos - 1] == '*') {
+				for (std::size_t i = 0; i < pos - 1; i++) {
+					ss << form[i];
+				}
+				via = ss.str();
+				this->Pry = atoi(via.c_str());
 
-			pos += 3;
-			endp = form.find(")", pos);
-			subs = form.substr(pos + 1, endp - 1);
-			get_Cof_Deg(subs, COF, DEG);
-			this->Degree = DEG;
-			this->Coefficient = COF;
+				pos += 3;
+				endp = form.find(")", pos);
+				subs = form.substr(pos + 1, endp - 1);
+				get_Cof_Deg(subs, COF, DEG);
+				this->Degree = DEG;
+				this->Coefficient = COF;
+			}
+			else {
+				pos += 3;
+				endp = form.find(")", pos);
+				subs = form.substr(pos + 1, endp - 1);
+				get_Cof_Deg(subs, COF, DEG);
+				this->Degree = DEG;
+				this->Coefficient = COF;
+			}
 		}
 		else {
 			pos += 3;
@@ -174,19 +194,29 @@ Monomial::Monomial(std::string const &form) {
 	else if (form.find("tan(") != std::string::npos) {
 		this->is_tan = true;
 		pos = form.find("tan(");
-		if (form[pos - 1] == '*') {
-			for (std::size_t i = 0; i < pos - 1; i++) {
-				ss << form[i];
-			}
-			via = ss.str();
-			this->Pry = atoi(via.c_str());
+		if (pos > 0) {
+			if (form[pos - 1] == '*') {
+				for (std::size_t i = 0; i < pos - 1; i++) {
+					ss << form[i];
+				}
+				via = ss.str();
+				this->Pry = atoi(via.c_str());
 
-			pos += 3;
-			endp = form.find(")", pos);
-			subs = form.substr(pos + 1, endp - 1);
-			get_Cof_Deg(subs, COF, DEG);
-			this->Degree = DEG;
-			this->Coefficient = COF;
+				pos += 3;
+				endp = form.find(")", pos);
+				subs = form.substr(pos + 1, endp - 1);
+				get_Cof_Deg(subs, COF, DEG);
+				this->Degree = DEG;
+				this->Coefficient = COF;
+			}
+			else {
+				pos += 3;
+				endp = form.find(")", pos);
+				subs = form.substr(pos + 1, endp - 1);
+				get_Cof_Deg(subs, COF, DEG);
+				this->Degree = DEG;
+				this->Coefficient = COF;
+			}
 		}
 		else {
 			pos += 3;
@@ -200,19 +230,29 @@ Monomial::Monomial(std::string const &form) {
 	else if (form.find("ln(") != std::string::npos) {
 		this->is_lan = true;
 		pos = form.find("ln(");
-		if (form[pos - 1] == '*') {
-			for (std::size_t i = 0; i < pos - 1; i++) {
-				ss << form[i];
-			}
-			via = ss.str();
-			this->Pry = atoi(via.c_str());
+		if (pos > 0) {
+			if (form[pos - 1] == '*') {
+				for (std::size_t i = 0; i < pos - 1; i++) {
+					ss << form[i];
+				}
+				via = ss.str();
+				this->Pry = atoi(via.c_str());
 
-			pos += 2;
-			endp = form.find(")", pos);
-			subs = form.substr(pos + 1, endp - 1);
-			get_Cof_Deg(subs, COF, DEG);
-			this->Degree = DEG;
-			this->Coefficient = COF;
+				pos += 2;
+				endp = form.find(")", pos);
+				subs = form.substr(pos + 1, endp - 1);
+				get_Cof_Deg(subs, COF, DEG);
+				this->Degree = DEG;
+				this->Coefficient = COF;
+			}
+			else {
+				pos += 3;
+				endp = form.find(")", pos);
+				subs = form.substr(pos + 1, endp - 1);
+				get_Cof_Deg(subs, COF, DEG);
+				this->Degree = DEG;
+				this->Coefficient = COF;
+			}
 		}
 		else {
 			pos += 3;

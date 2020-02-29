@@ -1,12 +1,9 @@
-#include <iomanip>
 #include "CPP_MP.h"
 using namespace std;
 
 
 int main() {
-	//testPolynomial();
-	//Function x("cos(1*x) + 2*x"),y;
-	Monomial x("5*cos(2*x)");
+	Function x("cos(1*x) + 2*x"),y;
 	x.Derive();
 	cout << x;
 
