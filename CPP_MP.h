@@ -5,11 +5,13 @@
 #include <string>
 #include <sstream>
 #include <stack>
+#include <cmath>
 
 class Monomial {
 public:
 	int Degree;
 	double Coefficient;
+	double Pry;
 	bool is_monom;
 	bool is_cos, is_sin, is_tan, is_lan, is_E;
 
@@ -25,6 +27,7 @@ public:
 	 void operator/(Monomial const &b);
 	 void Derive();
 	 void Derive(int const &mag);
+	 double operator[](double const &x_value);
 	 
 };
 
@@ -326,8 +329,136 @@ void Monomial::operator/(Monomial const &b) {
 	this->Coefficient /= b.Coefficient;
 	this->Degree -= b.Degree;
 }
-void Derive();
-void Derive(int const &mag);
+void Monomial::Derive() {
+	if (is_cos == true) {
+		
+	}
+	else if (is_sin == true) {
+
+	}
+	else if (is_tan==true) {
+
+	}
+	else if (is_lan == true) {
+
+	}
+	else if (is_monom == true) {
+		if (Degree == 1) {
+			Degree = 0;
+			return;
+		}
+		else if (Degree == 0) {
+			Coefficient = 0;
+		}
+		else {
+			this->Coefficient *= Degree;
+			this->Degree--;
+		}
+	}
+	else {
+		return;
+	}
+}
+void Monomial::Derive(int const &mag) {
+	for (int i = 0; i < mag; i++) {
+		Derive();
+	}
+}
+double Monomial::operator[](double const &x_value) {
+	if (this->is_cos == true) {
+		if (Degree == 0) {
+			return cos(Coefficient);
+		}
+		else if (Degree == 1) {
+			return cos(Coefficient * x_value);
+		}
+		else {
+			double t_valv = x_value;
+
+			for (unsigned i = 1; i < Degree; i++) {
+				t_valv *= x_value;
+			}
+			t_valv *= Coefficient;
+			return cos(t_valv);
+		}
+	}
+	else if (this->is_monom == true) {
+
+		if (Degree == 0) {
+			return Coefficient;
+		}
+		else if (Degree == 1) {
+			return Coefficient * x_value;
+		}
+		else {
+			double t_valv = x_value;
+
+			for (unsigned i = 1; i < Degree; i++) {
+				t_valv *= x_value;
+			}
+			t_valv *= Coefficient;
+			return t_valv;
+		}
+	}
+	else if (this->is_tan == true) {
+		if (Degree == 0) {
+			return std::tan(Coefficient);
+
+		}
+		else if (Degree == 1) {
+			return std::tan(Coefficient * x_value);
+		}
+		else {
+			double t_valv = x_value;
+
+			for (unsigned i = 1; i < Degree; i++) {
+				t_valv *= x_value;
+			}
+			t_valv *= Coefficient;
+			return std::tan(t_valv);
+		}
+	}
+	else if (this->is_lan == true) {
+		if (Degree == 0) {
+			return std::log(Coefficient);
+
+		}
+		else if (Degree == 1) {
+			return std::log(Coefficient * x_value);
+		}
+		else {
+			double t_valv = x_value;
+
+			for (unsigned i = 1; i < Degree; i++) {
+				t_valv *= x_value;
+			}
+			t_valv *= Coefficient;
+			return std::log(t_valv);
+		}
+	}
+	else if (this->is_sin == true) {
+		if (Degree == 0) {
+			return std::sin(Coefficient);
+			
+		}
+		else if (Degree == 1) {
+			return std::sin(Coefficient * x_value);
+		}
+		else {
+			double t_valv = x_value;
+
+			for (unsigned i = 1; i < Degree; i++) {
+				t_valv *= x_value;
+			}
+			t_valv *= Coefficient;
+			return std::sin(t_valv);
+		}
+	}
+	else {
+		return 0;
+	}
+
+}
 
 
 
@@ -347,11 +478,79 @@ public:
 	std::stack<Monomial> operands;
 	Function();
 	Function(const char *function);
-
+	double operator[](double const &x_value);
 	friend std::ostream &operator<<(std::ostream &out, Function const &func);
+	void Derive();
+	void Derive(int const &mag);
 
 };
 
+double commit_operation(char const &op, double const &a, double const &b) {
+	double sum = 0;
+	switch (op)
+	{
+	case '+':
+		sum = a + b;
+		return sum;
+		break;
+	case '-':
+		sum = a - b;
+		return sum;
+		break;
+
+	case '*':
+		sum = a * b;
+		return sum;
+		break;
+
+	case '/':
+
+		sum = a / b;
+		return sum;
+		break;
+
+	case '^':
+		sum = pow(a, b);
+		return sum;
+		break;
+
+
+
+	default:
+		return 0;
+		break;
+	}
+}
+int sign_pt(char const &op) {
+	switch (op)
+	{
+	case '+':
+		return 1;
+		break;
+	case '-':
+		return 1;
+		break;
+
+	case '*':
+		return 2;
+		break;
+
+	case '/':
+
+		return 2;
+		break;
+
+	case '^':
+		return 3;
+		break;
+
+
+
+	default:
+		return 0;
+		break;
+	}
+}
 Function::Function() {
 
 }
@@ -397,6 +596,53 @@ Function::Function(const char *function) {
 	}
 
 }
+double Function::operator[](double const &x_value) {
+	std::vector<double> infix;
+	std::stack<char> opts;
+	std::stack<double> oprnds;
+	char temp;
+	double a, b, sum;
+	int k = 0;
+	for (int i = 0; i < Body.size(); i++) {
+		oprnds.push(Body[i][x_value]);
+		if (k < signs.size()) {
+			if (opts.empty()) {
+				opts.push(signs[k]);
+			}
+			else {
+				if (sign_pt(opts.top()) < sign_pt(signs[k])) {
+					opts.push(signs[k]);
+				}
+				else {
+					temp = opts.top();
+					opts.pop();
+					a = oprnds.top();
+					oprnds.pop();
+					b = oprnds.top();
+					oprnds.pop();
+					sum = commit_operation(temp, a, b);
+					oprnds.push(sum);
+					opts.push(signs[k]);
+				}
+			}
+			k++;
+		}
+
+	}
+
+	while (!opts.empty()) {
+		a = oprnds.top();
+		oprnds.pop();
+		b = oprnds.top();
+		oprnds.pop();
+		temp = opts.top();
+		opts.pop();
+		sum = commit_operation(temp, b, a);
+		oprnds.push(sum);
+	}
+	return oprnds.top();
+
+}
 std::ostream &operator<<(std::ostream &out, Function const &func) {
 	int k = 0;
 	for (unsigned i = 0; i < func.Body.size(); i++) {
@@ -412,4 +658,14 @@ std::ostream &operator<<(std::ostream &out, Function const &func) {
 	for (unsigned i = 0; i < func.Body.size(); i++) {
 	}
 	return out;
+}
+void  Function::Derive() {
+	for (int i = 0; i < Body.size(); i++) {
+		Body[i].Derive();
+	}
+}
+void Function::Derive(int const &mag) {
+	for (int i = 0; i < mag; i++) {
+		this->Derive();
+	}
 }
