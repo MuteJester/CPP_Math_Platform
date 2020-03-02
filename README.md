@@ -1,6 +1,6 @@
 # Algebraic Support Platform For CPP
 
-A small library which allows the developer to work with an algebraic expression as variables for easier and faster programming when the usage of math is needed
+A small library which allows the developer to work with an algebraic expression as variables, as well as Matrixes ,Macros,geometry,statistics and probability  for easier and faster programming when the usage of math is needed 
 
 ## Getting Started
 
