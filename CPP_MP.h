@@ -1428,6 +1428,104 @@ Function Function::Taylor_Polynomial(int const &derivative_n) {
 
 
 
+
+
+//complex
+
+class Complex {
+public:
+	double a;
+	double bi;
+	Complex();
+	Complex(double const &real, double const &imaginary);
+	void Conjugate();
+	void operator+(Complex const &B);
+	void operator-(Complex const &B);
+	void operator*(Complex const &B);
+	void operator/(Complex const &B);
+	void operator^(int const &B);
+	friend std::ostream &operator<<(std::ostream &out, Complex const &source);
+	friend std::istream &operator>>(std::istream &in, Complex &source);
+	void operator=(Complex const &source);
+
+
+};
+Complex::Complex() {
+	this->a = 0;
+	this->bi = 0;
+}
+Complex::Complex(double const &real, double const &imaginary) {
+	this->a = real;
+	this->bi = imaginary;
+}
+void Complex::operator=(Complex const &source) {
+	this->a = source.a;
+	this->bi = source.bi;
+}
+void Complex::operator+(Complex const &B) {
+	this->a += B.a;
+	this->bi += B.bi;
+}
+void Complex::operator-(Complex const &B) {
+	this->a -= B.a;
+	this->bi -= B.bi;
+}
+void Complex::operator*(Complex const &B) {
+	double aa = this->a*B.a - (this->bi*B.bi);
+	double bb = this->a *B.bi + this->bi * B.a;
+	this->a = aa;
+	this->bi = bb;
+}
+void Complex::operator^(int const &B) {
+	for (int i = 1; i < B; i++) {
+		*this * *this;
+	}
+}
+void Complex::operator/(Complex const &B) {
+	double divisor = SQUARE_IT(B.a) + SQUARE_IT(B.bi);
+	Complex t = B;
+	t.Conjugate();
+	*this * t;
+	this->a /= divisor;
+	this->bi /= divisor;
+}
+std::ostream &operator<<(std::ostream &out, Complex const &source) {
+	if (source.bi > 0.0 && source.a > 0.0) {
+		out << source.a << "+" << source.bi<<"i";
+		return out;
+	}
+	else if (source.bi == 0.0) {
+		out << source.a;
+		return out;
+	}
+	else if (source.bi >0.0 && source.a ==0.0) {
+		out << source.bi << "i";
+		return out;
+	}
+	else if (source.bi > 0.0 && source.a < 0.0) {
+		out << source.a << "+" << source.bi << "i";
+		return out;
+	}
+	else {
+		out << source.a << source.bi<<"i";
+		return out;
+	}
+}
+std::istream &operator>>(std::istream &in, Complex &source) {
+	in >> source.a >> source.bi;
+	return in;
+}
+void Complex::Conjugate() {
+	this->bi *= -1;
+}
+
+
+
+
+
+
+
+
 //vecs
 std::ostream &operator<<(std::ostream &out, std::vector<int> const &body) {
 	out << "[";
@@ -1854,3 +1952,6 @@ int Factorial(int const &value) {
 	}
 	return sum;
 }
+
+
+
