@@ -31,9 +31,9 @@
 #define FAHRENHEIT_TO_CELSIUS(FAHRENHEIT) ((FAHRENHEIT-32)*5)/9
 
 #define IDENTITY_MATRIX 'i'
+#define RESET '"'
 
-
-
+namespace Math {
 
 
 //matirx ops
@@ -1566,392 +1566,455 @@ std::ostream &operator<<(std::ostream &out, std::vector<float> const &body) {
 
 
 
-double Vector_Mean(std::vector<int> const &num) {
-	double sum = 0;
-	for (auto i : num) {
-		sum += i;
-	}
-	return sum / num.size();
-}
-double Vector_Mean(std::vector<double> const &num) {
-	double sum = 0;
-	for (auto i : num) {
-		sum += i;
-	}
-	return sum / num.size();
-}
-float Vector_Mean(std::vector<float> const &num) {
-	float sum = 0;
-	for (auto i : num) {
-		sum += i;
-	}
-	return sum / num.size();
-}
-double Vector_Median(std::vector<int> nums) {
-	std::sort(nums.begin(), nums.end());
-	if (nums.size() % 2 == 0) {
-		return (double)(nums[nums.size() / 2] + nums[(nums.size() / 2) - 1]) / 2;
-	}
-	else {
 
-		return nums[nums.size() / 2];
+	double Vector_Mean(std::vector<int> const &num) {
+		double sum = 0;
+		for (auto i : num) {
+			sum += i;
+		}
+		return sum / num.size();
 	}
-}
-double Vector_Median(std::vector<double> num) {
-	std::sort(num.begin(), num.end());
-	if (num.size() % 2 == 0) {
-		return (num[num.size() / 2] + num[(num.size() / 2) - 1]) / 2;
+	double Vector_Mean(std::vector<double> const &num) {
+		double sum = 0;
+		for (auto i : num) {
+			sum += i;
+		}
+		return sum / num.size();
 	}
-	else {
+	float Vector_Mean(std::vector<float> const &num) {
+		float sum = 0;
+		for (auto i : num) {
+			sum += i;
+		}
+		return sum / num.size();
+	}
+	double Vector_Median(std::vector<int> nums) {
+		std::sort(nums.begin(), nums.end());
+		if (nums.size() % 2 == 0) {
+			return (double)(nums[nums.size() / 2] + nums[(nums.size() / 2) - 1]) / 2;
+		}
+		else {
 
-		return num[num.size() / 2];
+			return nums[nums.size() / 2];
+		}
 	}
-}
-float Vector_Median(std::vector<float> num) {
-	std::sort(num.begin(), num.end());
-	if (num.size() % 2 == 0) {
-		return (num[num.size() / 2] + num[(num.size() / 2) - 1]) / 2;
-	}
-	else {
+	double Vector_Median(std::vector<double> num) {
+		std::sort(num.begin(), num.end());
+		if (num.size() % 2 == 0) {
+			return (num[num.size() / 2] + num[(num.size() / 2) - 1]) / 2;
+		}
+		else {
 
-		return num[num.size() / 2];
+			return num[num.size() / 2];
+		}
 	}
-}
-int Vector_Mode(std::vector<int> const &num) {
-	std::vector<int> counter(num.size(), 0);
-	int max_val = 0, pos = 0;
-	for (auto i : num) {
-		counter[std::abs(i)]++;
+	float Vector_Median(std::vector<float> num) {
+		std::sort(num.begin(), num.end());
+		if (num.size() % 2 == 0) {
+			return (num[num.size() / 2] + num[(num.size() / 2) - 1]) / 2;
+		}
+		else {
+
+			return num[num.size() / 2];
+		}
 	}
-	for (unsigned i = 0; i < counter.size(); i++) {
-		if (counter[i] != 0) {
-			if (counter[i] > max_val) {
-				max_val = counter[i];
-				pos = i;
+	int Vector_Mode(std::vector<int> const &num) {
+		std::vector<int> counter(num.size(), 0);
+		int max_val = 0, pos = 0;
+		for (auto i : num) {
+			counter[std::abs(i)]++;
+		}
+		for (unsigned i = 0; i < counter.size(); i++) {
+			if (counter[i] != 0) {
+				if (counter[i] > max_val) {
+					max_val = counter[i];
+					pos = i;
+				}
 			}
 		}
+		return pos;
 	}
-	return pos;
-}
-double Vector_Mode(std::vector<double> const &num) {
-	double result=0;
-	int cur_max = 0;
-	int counter = 0;
-	for (unsigned i = 0; i < num.size(); i++) {
-		for (unsigned j = 0; j < num.size(); j++) {
-			if (num[i] == num[j]) {
-				counter++;
+	double Vector_Mode(std::vector<double> const &num) {
+		double result = 0;
+		int cur_max = 0;
+		int counter = 0;
+		for (unsigned i = 0; i < num.size(); i++) {
+			for (unsigned j = 0; j < num.size(); j++) {
+				if (num[i] == num[j]) {
+					counter++;
+				}
+			}
+			if (counter >= cur_max) {
+				cur_max = counter;
+				result = num[i];
 			}
 		}
-		if (counter >= cur_max) {
-			cur_max = counter;
-			result = num[i];
-		}
+		return result;
 	}
-	return result;
-}
-float Vector_Mode(std::vector<float> const &num) {
-	float result;
-	int cur_max = 0;
-	int counter = 0;
-	for (unsigned i = 0; i < num.size(); i++) {
-		for (unsigned j = 0; j < num.size(); j++) {
-			if (num[i] == num[j]) {
-				counter++;
+	float Vector_Mode(std::vector<float> const &num) {
+		float result;
+		int cur_max = 0;
+		int counter = 0;
+		for (unsigned i = 0; i < num.size(); i++) {
+			for (unsigned j = 0; j < num.size(); j++) {
+				if (num[i] == num[j]) {
+					counter++;
+				}
+			}
+			if (counter >= cur_max) {
+				cur_max = counter;
+				result = num[i];
 			}
 		}
-		if (counter >= cur_max) {
-			cur_max = counter;
-			result = num[i];
+		return result;
+	}
+	double Vector_Standard_Deviation(std::vector<int> const &population) {
+		double mean = Vector_Mean(population);
+		double sum = 0;
+		for (unsigned i = 0; i < population.size(); i++) {
+			sum += (SQUARE_IT((population[i] - mean)));
 		}
+		sum /= (double)population.size();
+		sum = std::sqrt(sum);
+		return sum;
 	}
-	return result;
-}
+	double Vector_Standard_Deviation(std::vector<double> const &population) {
+		double mean = Vector_Mean(population);
+		double sum = 0;
+		for (unsigned i = 0; i < population.size(); i++) {
+			sum += (SQUARE_IT((population[i] - mean)));
+		}
+		sum /= (double)population.size();
+		sum = std::sqrt(sum);
+		return sum;
+	}
+	float Vector_Standard_Deviation(std::vector<float> const &population) {
+		float mean = Vector_Mean(population);
+		float sum = 0;
+		for (unsigned i = 0; i < population.size(); i++) {
+			sum += (SQUARE_IT((population[i] - mean)));
+		}
+		sum /= (float)population.size();
+		sum = std::sqrt(sum);
+		return sum;
+	}
+	double Vector_Variance(std::vector<int> const &population) {
+		double Deviation = Vector_Standard_Deviation(population);
+		return SQUARE_IT(Deviation);
+	}
+	double Vector_Variance(std::vector<double> const &population) {
+		double Deviation = Vector_Standard_Deviation(population);
+		return SQUARE_IT(Deviation);
+	}
+	float Vector_Variance(std::vector<float> const &population) {
+		float Deviation = Vector_Standard_Deviation(population);
+		return SQUARE_IT(Deviation);
+	}
+	double Vector_Sample_Standard_Deviation(std::vector<int> const &sample) {
+		double samples_mean = Vector_Mean(sample);
+		double sum = 0;
+		for (unsigned i = 0; i < sample.size(); i++) {
+			sum += SQUARE_IT((sample[i] - samples_mean));
+		}
+		sum /= (sample.size() - 1);
+		return sqrt(sum);
+	}
+	double Vector_Sample_Standard_Deviation(std::vector<double> const &sample) {
+		double samples_mean = Vector_Mean(sample);
+		double sum = 0;
+		for (unsigned i = 0; i < sample.size(); i++) {
+			sum += SQUARE_IT((sample[i] - samples_mean));
+		}
+		sum /= (sample.size() - 1);
+		return sqrt(sum);
+	}
+	float Vector_Sample_Standard_Deviation(std::vector<float> const &sample) {
+		float samples_mean = Vector_Mean(sample);
+		float sum = 0;
+		for (unsigned i = 0; i < sample.size(); i++) {
+			sum += SQUARE_IT((sample[i] - samples_mean));
+		}
+		sum /= (sample.size() - 1);
+		return sqrt(sum);
+	}
+	double Z_Score(int value_to_standardized, std::vector<int> const &population) {
+		return (value_to_standardized - Vector_Mean(population)) / Vector_Standard_Deviation(population);
+	}
+	double Z_Score(int value_to_standardized, std::vector<double> const &population) {
+		return (value_to_standardized - Vector_Mean(population)) / Vector_Standard_Deviation(population);
+	}
+	float Z_Score(int value_to_standardized, std::vector<float> const &population) {
+		return (value_to_standardized - Vector_Mean(population)) / Vector_Standard_Deviation(population);
+	}
+	double Vector_Harmonic_Mean(std::vector<int> const &population) {
+		double divider = 0;
+		for (auto i : population) {
+			divider += (1 / i);
+		}
+		return ((double)population.size()) / divider;
+	}
+	double Vector_Harmonic_Mean(std::vector<double> const &population) {
+		double divider = 0;
+		for (auto i : population) {
+			divider += (1 / i);
+		}
+		return ((double)population.size()) / divider;
+	}
+	float Vector_Harmonic_Mean(std::vector<float> const &population) {
+		float divider = 0;
+		for (auto i : population) {
+			divider += (1 / i);
+		}
+		return ((float)population.size()) / divider;
+	}
+	int Vector_Get_Max_Value(std::vector<int> const &set) {
+		int cur_max = std::numeric_limits<int>::min();
+		for (auto i : set) {
+			i > cur_max ? cur_max = i : 0;
+		}
+		return cur_max;
+	}
+	double Vector_Get_Max_Value(std::vector<double> const &set) {
+		double cur_max = std::numeric_limits<double>::min();
+		for (auto i : set) {
+			i > cur_max ? cur_max = i : 0;
+		}
+		return cur_max;
+	}
+	float Vector_Get_Max_Value(std::vector<float> const &set) {
+		float cur_max = std::numeric_limits<float>::min();
+		for (auto i : set) {
+			i > cur_max ? cur_max = i : 0;
+		}
+		return cur_max;
+	}
+	int Vector_Get_Min_Value(std::vector<int> const &set) {
+		int cur_min = std::numeric_limits<int>::max();
+		for (auto i : set) {
+			i < cur_min ? cur_min = i : 0;
+		}
+		return cur_min;
+	}
+	double Vector_Get_Min_Value(std::vector<double> const &set) {
+		double cur_min = std::numeric_limits<double>::max();
+		for (auto i : set) {
+			i < cur_min ? cur_min = i : 0;
+		}
+		return cur_min;
+	}
+	float Vector_Get_Min_Value(std::vector<float> const &set) {
+		float cur_min = std::numeric_limits<float>::max();
+		for (auto i : set) {
+			i < cur_min ? cur_min = i : 0;
+		}
+		return cur_min;
+	}
+	std::vector<int> Random_INT_Vector(int const &vector_size) {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_int_distribution<int> ind(0, std::numeric_limits<int>::max());
+		std::vector<int> result(vector_size);
+		for (auto &i : result) {
+			i = ind(random_number_generator);
+		}
+		return result;
 
-double Vector_Standard_Deviation(std::vector<int> const &population) {
-	double mean = Vector_Mean(population);
-	double sum = 0;
-	for (unsigned i = 0; i < population.size(); i++) {
-		sum += (SQUARE_IT((population[i] - mean)));
 	}
-	sum /= (double)population.size();
-	sum = std::sqrt(sum);
-	return sum;
-}
-double Vector_Standard_Deviation(std::vector<double> const &population) {
-	double mean = Vector_Mean(population);
-	double sum = 0;
-	for (unsigned i = 0; i < population.size(); i++) {
-		sum += (SQUARE_IT((population[i] - mean)));
+	std::vector<int> Random_INT_Vector(int const &vector_size, int const &Random_upper_boundary) {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_int_distribution<int> ind(0, Random_upper_boundary);
+		std::vector<int> result(vector_size);
+		for (auto &i : result) {
+			i = ind(random_number_generator);
+		}
+		return result;
+
 	}
-	sum /= (double)population.size();
-	sum = std::sqrt(sum);
-	return sum;
-}
-float Vector_Standard_Deviation(std::vector<float> const &population) {
-	float mean = Vector_Mean(population);
-	float sum = 0;
-	for (unsigned i = 0; i < population.size(); i++) {
-		sum += (SQUARE_IT((population[i] - mean)));
+	std::vector<int> Random_INT_Vector(int const &vector_size, int const &Random_lower_boundary, int const &Random_upper_boundary) {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_int_distribution<int> ind(Random_lower_boundary, Random_upper_boundary);
+		std::vector<int> result(vector_size);
+		for (auto &i : result) {
+			i = ind(random_number_generator);
+		}
+		return result;
+
 	}
-	sum /= (float)population.size();
-	sum = std::sqrt(sum);
-	return sum;
-}
-double Vector_Variance(std::vector<int> const &population) {
-	double Deviation = Vector_Standard_Deviation(population);
-	return SQUARE_IT(Deviation);
-}
-double Vector_Variance(std::vector<double> const &population) {
-	double Deviation = Vector_Standard_Deviation(population);
-	return SQUARE_IT(Deviation);
-}
-float Vector_Variance(std::vector<float> const &population) {
-	float Deviation = Vector_Standard_Deviation(population);
-	return SQUARE_IT(Deviation);
-}
-double Vector_Sample_Standard_Deviation(std::vector<int> const &sample) {
-	double samples_mean = Vector_Mean(sample);
-	double sum = 0;
-	for (unsigned i = 0; i < sample.size(); i++) {
-		sum += SQUARE_IT((sample[i] - samples_mean));
+	std::vector<double> Random_DOUBLE_Vector(int const &vector_size) {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_real_distribution<double> ind(0, std::numeric_limits<double>::max());
+		std::vector<double> result(vector_size);
+		for (auto &i : result) {
+			i = ind(random_number_generator);
+		}
+		return result;
+
 	}
-	sum /= (sample.size() - 1);
-	return sqrt(sum);
-}
-double Vector_Sample_Standard_Deviation(std::vector<double> const &sample) {
-	double samples_mean = Vector_Mean(sample);
-	double sum = 0;
-	for (unsigned i = 0; i < sample.size(); i++) {
-		sum += SQUARE_IT((sample[i] - samples_mean));
+	std::vector<double> Random_DOUBLE_Vector(int const &vector_size, double const &Random_upper_boundary) {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_real_distribution<double> ind(0, Random_upper_boundary);
+		std::vector<double> result(vector_size);
+		for (auto &i : result) {
+			i = ind(random_number_generator);
+		}
+		return result;
+
 	}
-	sum /= (sample.size() - 1);
-	return sqrt(sum);
-}
-float Vector_Sample_Standard_Deviation(std::vector<float> const &sample) {
-	float samples_mean = Vector_Mean(sample);
-	float sum = 0;
-	for (unsigned i = 0; i < sample.size(); i++) {
-		sum += SQUARE_IT((sample[i] - samples_mean));
+	std::vector<double> Random_DOUBLE_Vector(int const &vector_size, double const &Random_lower_boundary, double const &Random_upper_boundary) {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		//std::uniform_int_distribution<size_t> indices(0, data.size() - 1);
+		std::uniform_real_distribution<double> ind(Random_lower_boundary, Random_upper_boundary);
+		std::vector<double> result(vector_size);
+		for (auto &i : result) {
+			i = ind(random_number_generator);
+		}
+		return result;
+
 	}
-	sum /= (sample.size() - 1);
-	return sqrt(sum);
-}
-double Z_Score(int value_to_standardized, std::vector<int> const &population) {
-	return (value_to_standardized - Vector_Mean(population)) / Vector_Standard_Deviation(population);
-}
-double Z_Score(int value_to_standardized, std::vector<double> const &population) {
-	return (value_to_standardized - Vector_Mean(population)) / Vector_Standard_Deviation(population);
-}
-float Z_Score(int value_to_standardized, std::vector<float> const &population) {
-	return (value_to_standardized - Vector_Mean(population)) / Vector_Standard_Deviation(population);
-}
-double Vector_Harmonic_Mean(std::vector<int> const &population) {
-	double divider = 0;
-	for (auto i : population) {
-		divider += (1 / i);
+	std::vector<float> Random_FLOAT_Vector(int const &vector_size) {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_real_distribution<float> ind(0, std::numeric_limits<float>::max());
+		std::vector<float> result(vector_size);
+		for (auto &i : result) {
+			i = ind(random_number_generator);
+		}
+		return result;
+
 	}
-	return ((double)population.size()) / divider;
-}
-double Vector_Harmonic_Mean(std::vector<double> const &population) {
-	double divider = 0;
-	for (auto i : population) {
-		divider += (1 / i);
+	std::vector<float> Random_FLOAT_Vector(int const &vector_size, float const &Random_upper_boundary) {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_real_distribution<float> ind(0, Random_upper_boundary);
+		std::vector<float> result(vector_size);
+		for (auto &i : result) {
+			i = ind(random_number_generator);
+		}
+		return result;
+
 	}
-	return ((double)population.size()) / divider;
-}
-float Vector_Harmonic_Mean(std::vector<float> const &population) {
-	float divider = 0;
-	for (auto i : population) {
-		divider += (1 / i);
+	std::vector<float> Random_FLOAT_Vector(int const &vector_size, float const &Random_lower_boundary, float const &Random_upper_boundary) {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_real_distribution<float> ind(Random_lower_boundary, Random_upper_boundary);
+		std::vector<float> result(vector_size);
+		for (auto &i : result) {
+			i = ind(random_number_generator);
+		}
+		return result;
+
 	}
-	return ((float)population.size()) / divider;
-}
-int Vector_Get_Max_Value(std::vector<int> const &set) {
-	int cur_max = std::numeric_limits<int>::min();
-	for (auto i : set) {
-		i > cur_max ? cur_max = i : 0;
+	int Random_INT() {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_int_distribution<int> ind(0, std::numeric_limits<int>::max());
+		return ind(random_number_generator);
 	}
-	return cur_max;
-}
-double Vector_Get_Max_Value(std::vector<double> const &set) {
-	double cur_max = std::numeric_limits<double>::min();
-	for (auto i : set) {
-		i > cur_max ? cur_max = i : 0;
+	int Random_INT(int const &Random_upper_boundary) {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_int_distribution<int> ind(0, Random_upper_boundary);
+		return ind(random_number_generator);
 	}
-	return cur_max;
-}
-float Vector_Get_Max_Value(std::vector<float> const &set) {
-	float cur_max = std::numeric_limits<float>::min();
-	for (auto i : set) {
-		i > cur_max ? cur_max = i : 0;
+	double Random_DOUBLE() {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_real_distribution<double> ind(0, std::numeric_limits<double>::max());
+		return ind(random_number_generator);
 	}
-	return cur_max;
-}
-int Vector_Get_Min_Value(std::vector<int> const &set) {
-	int cur_min = std::numeric_limits<int>::max();
-	for (auto i : set) {
-		i < cur_min ? cur_min = i : 0;
+	double Random_DOUBLE(double const &Random_upper_boundary) {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_real_distribution<double> ind(0, Random_upper_boundary);
+		return ind(random_number_generator);
 	}
-	return cur_min;
-}
-double Vector_Get_Min_Value(std::vector<double> const &set) {
-	double cur_min = std::numeric_limits<double>::max();
-	for (auto i : set) {
-		i < cur_min ? cur_min = i : 0;
+	float Random_FLOAT() {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_real_distribution<float> ind(0, std::numeric_limits<float>::max());
+		return ind(random_number_generator);
 	}
-	return cur_min;
-}
-float Vector_Get_Min_Value(std::vector<float> const &set) {
-	float cur_min = std::numeric_limits<float>::max();
-	for (auto i : set) {
-		i < cur_min ? cur_min = i : 0;
+	float Random_FLOAT(float const &Random_upper_boundary) {
+		std::random_device seed;
+		std::mt19937 random_number_generator(seed());
+		std::uniform_real_distribution<float> ind(0, Random_upper_boundary);
+		return ind(random_number_generator);
 	}
-	return cur_min;
-}
-std::vector<int> Random_INT_Vector(int const &vector_size) {
-	std::random_device seed; 
-	std::mt19937 random_number_generator(seed()); 
-	std::uniform_int_distribution<int> ind(0, std::numeric_limits<int>::max());
-	std::vector<int> result(vector_size);
-	for (auto &i : result) {
-		i = ind(random_number_generator);
+	int Factorial(int const &value) {
+		if (value == 1) {
+			return value;
+		}
+		return value * Factorial(value - 1);
 	}
-	return result;
+	double Factorial(double const &value) {
+		if (value == 0) {
+			return value;
+		}
+		return value * Factorial(value - 1);
+	}
+	float Factorial(float const &value) {
+		if (value == 0) {
+			return value;
+		}
+		return value * Factorial(value - 1);
+	}
+
+
+	class Counter{
+	protected:
+		int value;
+		int step_size;
+	public:
+		Counter() {
+			value = 0;
+			step_size = 1;
+		}
+		
+		void operator()(int &b) {
+			value += step_size;
+			b = value;
+		}
+
+		void Reset() {
+			value = 0;
+		}
+		void setPosition(int const &pos) {
+			this->value = pos;
+		}
+		void setStep_Size(int const &step_size) {
+			this->step_size = step_size;
+		}
+	};
+
+	template<class c_type> class Cycle {
+	protected:
+		std::vector<c_type> Cycle_Body;
+		int pos;
+	public:
+		Cycle() {
+			pos = 0;
+		}
+		Cycle(std::vector<c_type> set) {
+			Cycle_Body = set;
+			pos = 0;
+		}
+		void operator()(c_type &dest) {
+			dest = Cycle_Body[pos++];
+			if (pos == Cycle_Body.size()) {
+				pos = 0;
+			}
+		}
+	};
+
+
 
 }
-std::vector<int> Random_INT_Vector(int const &vector_size, int const &Random_upper_boundary) {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	std::uniform_int_distribution<int> ind(0, Random_upper_boundary);
-	std::vector<int> result(vector_size);
-	for (auto &i : result) {
-		i = ind(random_number_generator);
-	}
-	return result;
-
-}
-std::vector<int> Random_INT_Vector(int const &vector_size, int const &Random_lower_boundary, int const &Random_upper_boundary) {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	std::uniform_int_distribution<int> ind(Random_lower_boundary, Random_upper_boundary);
-	std::vector<int> result(vector_size);
-	for (auto &i : result) {
-		i = ind(random_number_generator);
-	}
-	return result;
-
-}
-std::vector<double> Random_DOUBLE_Vector(int const &vector_size) {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	std::uniform_real_distribution<double> ind(0, std::numeric_limits<double>::max());
-	std::vector<double> result(vector_size);
-	for (auto &i : result) {
-		i = ind(random_number_generator);
-	}
-	return result;
-
-}
-std::vector<double> Random_DOUBLE_Vector(int const &vector_size, double const &Random_upper_boundary) {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	std::uniform_real_distribution<double> ind(0, Random_upper_boundary);
-	std::vector<double> result(vector_size);
-	for (auto &i : result) {
-		i = ind(random_number_generator);
-	}
-	return result;
-
-}
-std::vector<double> Random_DOUBLE_Vector(int const &vector_size, double const &Random_lower_boundary, double const &Random_upper_boundary) {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	//std::uniform_int_distribution<size_t> indices(0, data.size() - 1);
-	std::uniform_real_distribution<double> ind(Random_lower_boundary, Random_upper_boundary);
-	std::vector<double> result(vector_size);
-	for (auto &i : result) {
-		i = ind(random_number_generator);
-	}
-	return result;
-
-}
-std::vector<float> Random_FLOAT_Vector(int const &vector_size) {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	std::uniform_real_distribution<float> ind(0, std::numeric_limits<float>::max());
-	std::vector<float> result(vector_size);
-	for (auto &i : result) {
-		i = ind(random_number_generator);
-	}
-	return result;
-
-}
-std::vector<float> Random_FLOAT_Vector(int const &vector_size, float const &Random_upper_boundary) {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	std::uniform_real_distribution<float> ind(0, Random_upper_boundary);
-	std::vector<float> result(vector_size);
-	for (auto &i : result) {
-		i = ind(random_number_generator);
-	}
-	return result;
-
-}
-std::vector<float> Random_FLOAT_Vector(int const &vector_size, float const &Random_lower_boundary, float const &Random_upper_boundary) {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	std::uniform_real_distribution<float> ind(Random_lower_boundary, Random_upper_boundary);
-	std::vector<float> result(vector_size);
-	for (auto &i : result) {
-		i = ind(random_number_generator);
-	}
-	return result;
-
-}
-int Random_INT() {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	std::uniform_int_distribution<int> ind(0, std::numeric_limits<int>::max());
-	return ind(random_number_generator);
-}
-int Random_INT(int const &Random_upper_boundary) {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	std::uniform_int_distribution<int> ind(0, Random_upper_boundary);
-	return ind(random_number_generator);
-}
-double Random_DOUBLE() {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	std::uniform_real_distribution<double> ind(0, std::numeric_limits<double>::max());
-	return ind(random_number_generator);
-}
-double Random_DOUBLE(double const &Random_upper_boundary) {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	std::uniform_real_distribution<double> ind(0, Random_upper_boundary);
-	return ind(random_number_generator);
-}
-float Random_FLOAT() {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	std::uniform_real_distribution<float> ind(0, std::numeric_limits<float>::max());
-	return ind(random_number_generator);
-}
-float Random_FLOAT(float const &Random_upper_boundary) {
-	std::random_device seed;
-	std::mt19937 random_number_generator(seed());
-	std::uniform_real_distribution<float> ind(0, Random_upper_boundary);
-	return ind(random_number_generator);
-}
-int Factorial(int const &value) {
-	int sum = 1;
-	for (int i = 1; i < value+1; i++) {
-		sum *= i;
-	}
-	return sum;
-}
+//union  intersection join permutations..
 
 
 
