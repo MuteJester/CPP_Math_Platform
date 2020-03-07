@@ -7,25 +7,6 @@ A small library which allows the developer to work with an algebraic expression 
 To start working with the library simply download CPP_MP.h from the reposetoriy, include it in your project and you are ready to code! 
 
 
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
 ## Running the tests
 
 To make sure the header works properly you can copy the following main and try to run it:
