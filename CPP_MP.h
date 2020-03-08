@@ -29,11 +29,58 @@
 #define MILE_TO_KILOMETER(MILE) MILE * 1.609344
 #define CELSIUS_TO_FAHRENHEIT(CELSIUS) ((CELSIUS/5)*9)+32
 #define FAHRENHEIT_TO_CELSIUS(FAHRENHEIT) ((FAHRENHEIT-32)*5)/9
+#define CIRCLE_AREA(RADIUS) (PI * SQUARE_IT(RADIUS))
 
 #define IDENTITY_MATRIX 'i'
 #define RESET '"'
 
 namespace Math {
+
+	
+
+
+	template<class p_type> class Point {
+	public:
+		p_type x, y, z;
+
+		Point() {
+			x = y = z = 0;
+		}
+		Point(p_type x, p_type y) {
+			this->x = x;
+			this->y = y;
+			this->z = 0;
+		}
+		Point(p_type x, p_type y, p_type z) {
+			this->x = x;
+			this->y = y;
+			this->z = z;
+		}
+		double get_Distance(Point<p_type> const &point_B) {
+			return sqrt(SQUARE_IT((point_B.x - this->x)) + SQUARE_IT((point_B.y - this->y)) + SQUARE_IT((point_B.z-this->z)));
+		}
+		double get_Slope(Point<p_type> const &point_B) {
+			return (point_B.y - this->y) / (point_B.x - this->x);
+		}
+		double get_Magnitude() {
+			return sqrt((SQUARE_IT(this->x)) + (SQUARE_IT(this->y)) + (SQUARE_IT(this->z)));
+		}
+	
+	};
+	template<class p_type> double X_Linear_Interpolation(Point<p_type> const &A, Point<p_type> const &B, p_type y_value) {
+		return (((y_value - A.y)*(B.x - A.x)) / (B.y - A.y) + A.x);
+	}
+	template<class p_type> double Y_Linear_Interpolation(Point<p_type> const &A, Point<p_type> const &B, p_type x_value) {
+		return (double)(x_value - A.x)*(B.y - A.y) / (B.x - A.x) + A.y;
+	}
+	void Quadratic_Equation(double const &a, double const &b, double const &c, double &result_root_a, double &result_root_b) {
+		result_root_a = (-b + std::sqrt(((SQUARE_IT(b)) - 4 * a*c))) / 2 * a;
+		result_root_b = ((-b - std::sqrt(((SQUARE_IT(b)) - 4 * a*c))) )/ 2 * a;
+	}
+	template<class p_type> double Point_Dot_Product(Point<p_type> const &A, Point<p_type> const &B) {
+		return A.x*B.x + A.y*B.y + A.z*B.z;
+	}
+
 
 
 //matirx ops
@@ -1159,7 +1206,7 @@ public:
 	friend std::ostream &operator<<(std::ostream &out, Function const &func);
 	void Derive();
 	void Derive(int const &mag);
-	int Get_Highest_Degree();
+	double Get_Highest_Degree();
 	double Newton_Raphson_Method(double const &guess,double const &deg_of_accuracy,double const &check_slope);
 	Function Taylor_Polynomial(int const &derivative_n);
 	void operator+(Function const &B);
@@ -1353,8 +1400,8 @@ void Function::Derive(int const &mag) {
 		this->Derive();
 	}
 }
-int Function::Get_Highest_Degree() {
-	int max = 0;
+double Function::Get_Highest_Degree() {
+	double max = 0;
 	for (auto i : Body) {
 		max < i.Degree ? max = i.Degree : max = max;
 	}
@@ -2010,6 +2057,44 @@ std::ostream &operator<<(std::ostream &out, std::vector<float> const &body) {
 			}
 		}
 	};
+
+	template<class p_type> void Print_Permutations(std::vector< p_type> sample,int start =0)
+	{
+		if (start == sample.size()-1)
+			std::cout << sample << std::endl;
+		else
+		{
+			for (int i = start; i <= sample.size()-1; i++)
+			{
+				
+				std::swap(sample[start], sample[i]);
+
+				Math::Print_Permutations(sample, start + 1);
+
+				std::swap(sample[start], sample[i]);
+			}
+		}
+	}
+
+	template<class p_type> void Get_Permutations(std::vector< p_type> sample, std::vector<std::vector<p_type> > &output, int start = 0)
+	{
+		if (start == sample.size() - 1) {
+			output.push_back(sample);
+		}
+		else
+		{
+			for (unsigned i = start; i <= sample.size() - 1; i++)
+			{
+
+				std::swap(sample[start], sample[i]);
+
+				Math::Get_Permutations(sample, output,start + 1);
+
+				std::swap(sample[start], sample[i]);
+			}
+		}
+	}
+
 
 
 
