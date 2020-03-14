@@ -30,11 +30,49 @@
 #define CELSIUS_TO_FAHRENHEIT(CELSIUS) ((CELSIUS/5)*9)+32
 #define FAHRENHEIT_TO_CELSIUS(FAHRENHEIT) ((FAHRENHEIT-32)*5)/9
 #define CIRCLE_AREA(RADIUS) (PI * SQUARE_IT(RADIUS))
+#define Mmax(a,b) ((a) > (b) ? (a) : (b))
+
 
 #define IDENTITY_MATRIX 'i'
 #define RESET '"'
 
 namespace Math {
+	std::ostream &operator<<(std::ostream &out, std::vector<int> const &body) {
+		out << "[";
+		for (unsigned i = 0; i < body.size(); i++) {
+			if (i + 1 != body.size())
+				out << body[i] << ", ";
+			else
+				out << body[i];
+
+		}
+		out << "]";
+		return out;
+	}
+	std::ostream &operator<<(std::ostream &out, std::vector<double> const &body) {
+		out << "[";
+		for (unsigned i = 0; i < body.size(); i++) {
+			if (i + 1 != body.size())
+				out << body[i] << ", ";
+			else
+				out << body[i];
+
+		}
+		out << "]";
+		return out;
+	}
+	std::ostream &operator<<(std::ostream &out, std::vector<float> const &body) {
+		out << "[";
+		for (unsigned i = 0; i < body.size(); i++) {
+			if (i + 1 != body.size())
+				out << body[i] << ", ";
+			else
+				out << body[i];
+
+		}
+		out << "]";
+		return out;
+	}
 
 	
 
@@ -79,6 +117,16 @@ namespace Math {
 	}
 	template<class p_type> double Point_Dot_Product(Point<p_type> const &A, Point<p_type> const &B) {
 		return A.x*B.x + A.y*B.y + A.z*B.z;
+	}
+	template<class p_type> std::ostream &operator<<(std::ostream &out, Point< p_type> const &body) {
+		out << "[ " << body.x << ", " << body.y<<", "<<body.z<<" ]";
+		return out;
+	}
+	template<class p_type> std::ostream &operator<<(std::ostream &out, std::vector<Point< p_type> > const &body) {
+		for (int i = 0; i < body.size(); i++) {
+			out << body[i] << std::endl;
+		}
+		return out;
 	}
 
 
@@ -1210,6 +1258,12 @@ public:
 	double Newton_Raphson_Method(double const &guess,double const &deg_of_accuracy,double const &check_slope);
 	Function Taylor_Polynomial(int const &derivative_n);
 	void operator+(Function const &B);
+	double Bisection(double const &a, double const &b, double const &EPSILON);
+	std::vector<double> Get_Roots(double const &EPSILON);
+	std::vector<Point<double> > Get_Polynomial_Maximum();
+	std::vector<Point<double> > Get_Polynomial_Minimum();
+	void Remove_Zero();
+
 };
 
 double commit_operation(char const &op, double const &a, double const &b) {
@@ -1394,6 +1448,13 @@ void  Function::Derive() {
 	for (unsigned i = 0; i < Body.size(); i++) {
 		Body[i].Derive();
 	}
+	std::vector<Monomial>::iterator it;
+	it = Body.end();
+	it--;
+	if ((*it).Coefficient == 0 && (*it).Degree == 0) {
+		Remove_Zero();
+	}
+
 }
 void Function::Derive(int const &mag) {
 	for (int i = 0; i < mag; i++) {
@@ -1410,8 +1471,8 @@ double Function::Get_Highest_Degree() {
 double Function::Newton_Raphson_Method(double const &guess, double const &deg_of_accuracy, double const &check_slope=0.5) {
 	Function f, f1;
 	double fv,f1v,x = guess,x1 = 0;
-
-	while(true){
+	int critical = 100, counter = 0;
+	while(critical > counter){
 		f = *this;
 		f.Derive();
 		f1 = f;
@@ -1422,21 +1483,22 @@ double Function::Newton_Raphson_Method(double const &guess, double const &deg_of
 		f1v = f1[x];
 
 		if (abs(f1[x]) < check_slope) {
-			std::cout << "Slope is too small" << std::endl;
+		//	std::cout << "Slope is too small" << std::endl;
 			break;
 		}
 
 		x1 = x - (fv / f1v);
 
-		if ( abs((x1-x)/x1)< deg_of_accuracy) {
-			return x1;
+		if ( std::abs((x1-x)/x1)< deg_of_accuracy) {
+			return  x1;
 		}
 		x = x1;
-	
+		counter++;
 	}
-	std::cout << "Method does not converge due to oscillation" << std::endl;
-	return 0;
+//	std::cout << "Method does not converge due to oscillation" << std::endl;
+	return 666;
 }
+
 void  Function::operator+(Function const &B) {
 	unsigned i = 0;
 	unsigned j = 0;
@@ -1470,6 +1532,112 @@ Function Function::Taylor_Polynomial(int const &derivative_n) {
 		Temp.Derive();
 	}
 	return TP;
+}
+double Function::Bisection(double const &a, double const &b,double const &EPSILON) {
+	Function temp = *this;
+	double aa = a;
+	double bb = b;
+	if (temp[aa] * temp[bb] >= 0)
+	{
+		//std::cout << "You have not assumed right a and b\n";
+		return 666;
+	}
+
+	double c = aa;
+	while ((bb - aa) >= EPSILON)
+	{
+		c = (aa + bb) / 2;
+
+		if (temp[c] == 0.0)
+			break;
+
+		else if (temp[c]*temp[aa] < 0)
+			bb = c;
+		else
+			aa = c;
+	}
+	return c;
+
+}
+std::vector<double> Function::Get_Roots(double const &EPSILON) {
+	std::vector<double> result,f_res;
+	Function temp = *this;
+	Function Reg = *this;
+	for (double i = -50; i < 30; i += 1) {
+		result.push_back(this->Bisection(i, 20, EPSILON));
+		if (temp[i] == 0) {
+			result.push_back(i);
+		}
+	}
+	for (double i = -30; i < 20; i += 0.05) {
+		result.push_back(this->Newton_Raphson_Method(i, EPSILON));
+	}
+
+	sort(result.begin(), result.end());
+
+	for (unsigned i = 0; i < result.size()-1; i++) {
+			if(std::abs(result[i] - result[i+1])<EPSILON)
+			{
+				result[i]=666;
+			}
+	}
+	sort(result.begin(), result.end());
+	for (unsigned i = 0; i < result.size(); i++) {
+		if (result[i] == 666) {
+			break;
+		}
+		else {
+			f_res.push_back(result[i]);
+		}
+	}
+
+
+	return f_res;
+}
+std::vector<Point<double> >  Function::Get_Polynomial_Maximum() {
+	Function div = *this;
+	Function Reg = *this;
+	std::vector<Point<double> > Result;
+	div.Derive();
+	std::vector<double> roots = div.Get_Roots(0.001);
+	std::vector<double> max_points_x;
+	div.Derive(); //seconed diverative
+	for (unsigned i = 0; i < roots.size(); i++) {
+		if(div[roots[i]] < 0)
+			max_points_x.push_back(roots[i]);
+	}
+
+	for (unsigned i = 0; i < max_points_x.size(); i++) {
+		Result.push_back(Point<double>(max_points_x[i],Reg[max_points_x[i]]));
+	}
+
+	return Result;
+}
+std::vector<Point<double> > Function::Get_Polynomial_Minimum() {
+	Function div = *this;
+	Function Reg = *this;
+	std::vector<Point<double> > Result;
+	div.Derive();
+	std::vector<double> roots = div.Get_Roots(0.00001);
+	std::vector<double> max_points_x;
+	div.Derive(); //seconed diverative
+	for (unsigned i = 0; i < roots.size(); i++) {
+		if (div[roots[i]] > 0)
+			max_points_x.push_back(roots[i]);
+	}
+
+	for (unsigned i = 0; i < max_points_x.size(); i++) {
+		Result.push_back(Point<double>(max_points_x[i], Reg[max_points_x[i]]));
+	}
+
+	return Result;
+}
+void Function::Remove_Zero() {
+	std::vector<Monomial>::iterator it;
+	it = Body.end();
+	it--;
+	this->signs.pop_back();
+	Body.erase(it);
 }
 
 
@@ -1574,42 +1742,6 @@ void Complex::Conjugate() {
 
 
 //vecs
-std::ostream &operator<<(std::ostream &out, std::vector<int> const &body) {
-	out << "[";
-	for (unsigned i = 0; i < body.size(); i++) {
-		if (i + 1 != body.size())
-			out << body[i] << ", ";
-		else
-			out << body[i];
-
-	}
-	out << "]";
-	return out;
-}
-std::ostream &operator<<(std::ostream &out, std::vector<double> const &body) {
-	out << "[";
-	for (unsigned i = 0; i < body.size(); i++) {
-		if (i + 1 != body.size())
-			out << body[i] << ", ";
-		else
-			out << body[i];
-
-	}
-	out << "]";
-	return out;
-}
-std::ostream &operator<<(std::ostream &out, std::vector<float> const &body) {
-		out << "[";
-		for (unsigned i = 0; i < body.size(); i++) {
-			if (i + 1 != body.size())
-				out << body[i] << ", ";
-			else
-				out << body[i];
-
-		}
-		out << "]";
-		return out;
-	}
 
 
 
@@ -2097,9 +2229,120 @@ std::ostream &operator<<(std::ostream &out, std::vector<float> const &body) {
 
 
 
+	//long number operations
+
+	std::string Large_Number_Addition(std::string Num_a, std::string Num_b) {
+		int length = Mmax(Num_a.size(), Num_b.size());
+		int carry = 0;
+		int sum_col;  // sum of two digits in the same column
+		std::string result;
+
+		// pad the shorter string with zeros
+		while (Num_a.size() < (unsigned)length)
+			Num_a.insert(0, "0");
+
+		while (Num_b.size() < (unsigned)length)
+			Num_b.insert(0, "0");
+
+		// build result string from right to left
+		for (int i = length - 1; i >= 0; i--) {
+			sum_col = (Num_a[i] - '0') + (Num_b[i] - '0') + carry;
+			carry = sum_col / 10;
+			result.insert(0, std::to_string(sum_col % 10));
+		}
+
+		if (carry)
+			result.insert(0, std::to_string(carry));
+
+		// remove leading zeros
+		return result.erase(0, std::min(result.find_first_not_of('0'), result.size() - 1));
+	}
+
+	std::string Large_Number_Subtraction(std::string Num_a, std::string Num_b) {
+		int length = Mmax(Num_a.size(), Num_b.size());
+		int diff;
+		std::string result;
+
+		while (Num_a.size() < (unsigned)length)
+			Num_a.insert(0, "0");
+
+		while (Num_b.size() < (unsigned)length)
+			Num_b.insert(0, "0");
+
+		for (int i = length - 1; i >= 0; i--) {
+			diff = (Num_a[i] - '0') - (Num_b[i] - '0');
+			if (diff >= 0)
+				result.insert(0, std::to_string(diff));
+			else {
+
+				// borrow from the previous column
+				int j = i - 1;
+				while (j >= 0) {
+					Num_a[j] = ((Num_a[j] - '0') - 1) % 10 + '0';
+					if (Num_a[j] != '9')
+						break;
+					else
+						j--;
+				}
+				result.insert(0, std::to_string(diff + 10));
+			}
+
+		}
+
+		return result.erase(0, std::fmin(result.find_first_not_of('0'), result.size() - 1));
+	}
+
+	std::string Large_Number_Multiplication(std::string Num_a, std::string Num_b) {
+		int length = Mmax(Num_a.size(), Num_b.size());
+
+		while (Num_a.size() < length)
+			Num_a.insert(0, "0");
+
+		while (Num_b.size() < length)
+			Num_b.insert(0, "0");
+
+		if (length == 1)
+			return std::to_string((Num_a[0] - '0')*(Num_b[0] - '0'));
+
+		std::string lhs0 = Num_a.substr(0, length / 2);
+		std::string lhs1 = Num_a.substr(length / 2, length - length / 2);
+		std::string rhs0 = Num_b.substr(0, length / 2);
+		std::string rhs1 = Num_b.substr(length / 2, length - length / 2);
+
+		std::string p0 = Large_Number_Multiplication(lhs0, rhs0);
+		std::string p1 = Large_Number_Multiplication(lhs1, rhs1);
+		std::string p2 = Large_Number_Multiplication(Large_Number_Addition(lhs0, lhs1), Large_Number_Addition(rhs0, rhs1));
+		std::string p3 = Large_Number_Subtraction(p2, Large_Number_Addition(p0, p1));
+
+		for (int i = 0; i < 2 * (length - length / 2); i++)
+			p0.append("0");
+		for (int i = 0; i < length - length / 2; i++)
+			p3.append("0");
+
+		std::string result = Large_Number_Addition(Large_Number_Addition(p0, p1), p3);
+
+		return result.erase(0, std::fmin(result.find_first_not_of('0'), result.size() - 1));
+	}
+
+	std::string Large_Number_Factorial(std::string  const &n) {
+		std::string counter = std::to_string(1);
+		std::string result = n;
+		std::string multiplyer = n;
+		multiplyer = Large_Number_Subtraction(multiplyer, "1");
+		while (n.compare(counter) != 0) {
+			result = Large_Number_Multiplication(result, multiplyer);
+			multiplyer = Large_Number_Subtraction(multiplyer, "1");
+
+			counter = Large_Number_Addition(counter, "1");
+		}
+		return result;
+	}
+
+
 
 }
 //union  intersection join permutations..
+
 
 
 
